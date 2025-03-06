@@ -20,8 +20,20 @@ model Process {
   status    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+    subprocesses Subprocess[]
 }
 
+model Subprocess {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  process   Process  @relation(fields: [processId], references: [id])
+  processId Int
+}
+
+model Area {
+  id    Int     @id @default(autoincrement())
+  nome  String
+}
 
 enum UserRole {
   ADMIN
