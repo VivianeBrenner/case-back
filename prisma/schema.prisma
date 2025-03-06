@@ -14,13 +14,14 @@ model User {
   senha    String
   role     UserRole @default(USUARIO)
 }
-
 model Process {
-  id        String   @id @default(uuid())
+  id        Int     @id @default(autoincrement())
   nome      String
   status    String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
+
 
 enum UserRole {
   ADMIN
