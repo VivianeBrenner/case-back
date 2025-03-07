@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Param, Body } from "@nestjs/common";
+import { Controller, Get, Put, Param, Body, ParseIntPipe } from "@nestjs/common";
 import { UsersService } from "./users.service";
 
 @Controller("users")
@@ -11,7 +11,7 @@ export class UsersController {
   }
 
   @Put(":id/role")
-  updateRole(@Param("id") id: string, @Body() body: { role: string }) {
-    return this.usersService.updateRole(id, body.role.toUpperCase()); 
+  updateRole(@Param("id", ParseIntPipe) id: number, @Body() body: { role: string }) {
+    return this.usersService.updateRole(id, body.role);
   }
 }

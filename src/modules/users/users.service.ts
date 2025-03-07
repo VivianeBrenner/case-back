@@ -10,8 +10,9 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
-  async updateRole(id: string, role: string) {
-    
+  async updateRole(id: number, role: string) {
+    role = role.toUpperCase();
+
     if (!Object.values(UserRole).includes(role as UserRole)) {
       throw new BadRequestException("Role inválida. Deve ser 'ADMIN', 'MANAGER' ou 'USER'.");
     }
@@ -25,3 +26,4 @@ export class UsersService {
     });
   }
 }
+

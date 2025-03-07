@@ -5,30 +5,38 @@ import { PrismaService } from "../../config/prisma.service";
 export class SubprocessService {
   constructor(private prisma: PrismaService) {}
 
-  async createSubprocess(processId: number, nome: string) {
+  async findAll() {
+    return this.prisma.subprocess.findMany();
+  }
+
+  async findOne(id: number) {
+    const subprocess = await this.prisma.subprocess.findUnique({ where: { id } });
+    if (!subprocess) throw new NotFoundException("Subprocesso não encontrado.");
+    return subprocess;
+  }
+
+  async create(data: { nome: string; processoId: number }) {
     return this.prisma.subprocess.create({
-      data: { nome, processId },
+      data: {
+        nome: data.nome,
+        process: {
+          connect: { id: data.processoId }
+        }
+      }
     });
   }
 
-  async getSubprocesses(processId: number) {
-    return this.prisma.subprocess.findMany({ where: { processId } });
-  }
-
-  async updateSubprocess(processId: number, subId: number, nome: string) {
-    const subprocess = await this.prisma.subprocess.findUnique({ where: { id: subId, processId } });
+  async update(id: number, data: { nome: string }) {
+    const subprocess = await this.prisma.subprocess.findUnique({ where: { id } });
     if (!subprocess) throw new NotFoundException("Subprocesso não encontrado.");
 
-    return this.prisma.subprocess.update({
-      where: { id: subId },
-      data: { nome },
-    });
+    return this.prisma.subprocess.update({ where: { id }, data });
   }
 
-  async deleteSubprocess(processId: number, subId: number) {
-    const subprocess = await this.prisma.subprocess.findUnique({ where: { id: subId, processId } });
+  async remove(id: number) {
+    const subprocess = await this.prisma.subprocess.findUnique({ where: { id } });
     if (!subprocess) throw new NotFoundException("Subprocesso não encontrado.");
 
-    return this.prisma.subprocess.delete({ where: { id: subId } });
+    return this.prisma.subprocess.delete({ where: { id } });
   }
 }

@@ -1,31 +1,32 @@
-import { Controller, Post, Get, Put, Delete, Param, Body, NotFoundException } from "@nestjs/common";
+import { Controller, Get, Post, Put, Delete, Body, Param, NotFoundException } from "@nestjs/common";
 import { SubprocessService } from "./subprocess.service";
 
-@Controller("process/:processId/subprocess")
+@Controller("subprocess")
 export class SubprocessController {
-  constructor(private readonly subprocessService: SubprocessService) {}
-
-  @Post()
-  create(@Param("processId") processId: number, @Body() body: { nome: string }) {
-    return this.subprocessService.createSubprocess(processId, body.nome);
-  }
+  constructor(private readonly subprocessesService: SubprocessService) {}
 
   @Get()
-  findAll(@Param("processId") processId: number) {
-    return this.subprocessService.getSubprocesses(processId);
+  findAll() {
+    return this.subprocessesService.findAll();
   }
 
-  @Put(":subId")
-  update(
-    @Param("processId") processId: number,
-    @Param("subId") subId: number,
-    @Body() body: { nome: string }
-  ) {
-    return this.subprocessService.updateSubprocess(processId, subId, body.nome);
+  @Get(":id")
+  findOne(@Param("id") id: number) {
+    return this.subprocessesService.findOne(Number(id));
   }
 
-  @Delete(":subId")
-  remove(@Param("processId") processId: number, @Param("subId") subId: number) {
-    return this.subprocessService.deleteSubprocess(processId, subId);
+  @Post()
+  create(@Body() body: { nome: string; processoId: number }) {
+    return this.subprocessesService.create(body);
+  }
+
+  @Put(":id")
+  async update(@Param("id") id: number, @Body() body: { nome: string }) {
+    return this.subprocessesService.update(Number(id), body);
+  }
+
+  @Delete(":id")
+  async delete(@Param("id") id: number) {
+    return this.subprocessesService.remove(Number(id));
   }
 }

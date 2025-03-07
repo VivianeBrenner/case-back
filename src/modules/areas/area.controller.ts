@@ -16,8 +16,8 @@ export class AreaController {
   }
 
   @Put(":id")
-  update(@Param("id") id: number, @Body() body: { nome: string }) {
-    return this.areaService.update(id, body.nome);
+  async update(@Param("id") id: string, @Body() body: { nome: string }) {
+    return this.areaService.update(Number(id), body.nome); 
   }
 
   @Delete(":id")
