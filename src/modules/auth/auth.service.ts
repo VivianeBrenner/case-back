@@ -5,7 +5,10 @@ import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(
+    private prisma: PrismaService, 
+    private jwtService: JwtService
+  ) {}
 
   async register(body: { nome: string; email: string; senha: string; confirmarSenha: string }) {
     if (body.senha !== body.confirmarSenha) {
@@ -23,7 +26,18 @@ export class AuthService {
         },
       });
 
-      return { id: newUser.id, email: newUser.email, nome: newUser.nome };
+      const token = this.jwtService.sign(
+        { userId: newUser.id, email: newUser.email },
+        { secret: process.env.JWT_SECRET, expiresIn: "1h" },
+      );
+
+      return { 
+        id: newUser.id, 
+        email: newUser.email, 
+        nome: newUser.nome,
+        role: newUser.role,
+        token,
+      };
     } catch (error) {
       throw new BadRequestException("Erro ao criar usuário. Verifique se o email já está cadastrado.");
     }

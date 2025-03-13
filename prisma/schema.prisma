@@ -15,24 +15,33 @@ model User {
   role     UserRole @default(USUARIO)
 }
 model Process {
-  id        Int     @id @default(autoincrement())
-  nome      String
-  status    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-    subprocesses Subprocess[]
+  id            Int          @id @default(autoincrement())
+  nome          String
+  status        String
+  responsible   String?      
+  documentation String?      
+  areaId        Int?         
+  area          Area?        @relation(fields: [areaId], references: [id])
+  subprocesses  Subprocess[]
+  
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
 model Subprocess {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  process   Process  @relation(fields: [processId], references: [id])
-  processId Int
+  id           Int          @id @default(autoincrement())
+  nome         String
+  processId    Int?         
+  process      Process?     @relation(fields: [processId], references: [id])
+  parentSubId  Int?
+  parentSub    Subprocess?  @relation("SubprocessToSubprocess", fields: [parentSubId], references: [id])
+  subprocesses Subprocess[] @relation("SubprocessToSubprocess")
 }
 
 model Area {
   id    Int     @id @default(autoincrement())
   nome  String
+  processes Process[]
 }
 
 enum UserRole {
