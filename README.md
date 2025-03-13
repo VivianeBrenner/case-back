@@ -26,7 +26,7 @@ PORT=3000
 
 ## Deploy
 
-A API já está publicada em: [https://case-backend.vercel.app](https://case-backend.vercel.app)  
+A API já está publicada em: [https://case-back.onrender.com](https://case-back.onrender.com)  
 
 O banco de dados também está hospedado em ambiente de produção, garantindo que a API esteja sempre conectada a um banco de dados remoto.
 
