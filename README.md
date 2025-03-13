@@ -3,7 +3,6 @@
 Este projeto foi desenvolvido como parte de um case técnico.
 
 ## Tecnologias Utilizadas
----
 
 - **NestJS** – Framework para aplicações Node.js.
 - **Prisma** – ORM para PostgreSQL.
